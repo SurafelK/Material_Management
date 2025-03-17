@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { UserRouter } from "./router/userRouter";
+import { EmployeeRouter } from "./router/employeeRouter";
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ mongoose
   .catch((err) => console.log("MongoDB Connection Error: ", err));
 
 app.use('/api/user', UserRouter )
+app.use('/api/employee', EmployeeRouter)
+
 
 // Basic Route
 app.get("/", (req, res) => {

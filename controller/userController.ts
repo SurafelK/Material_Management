@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateUser, loginUser } from "../dto/user.dto";
+import { CreateUser, CustomRequest, loginUser } from "../dto/user.dto";
 import { genSalt } from "bcrypt";
 import { checkPassword, generateSignedToken, passwordHash } from "../Auth/auth.utils";
 import {  UserModel } from "../models/UserModel";
@@ -50,7 +50,6 @@ export const userLogin = async (req: Request, res: Response) => {
             res.status(400).json({message:"No or invalid credentials"})
             return
         }
-        console.log(user)
 
         const checkPass = await checkPassword(password, user.salt , user.password )
 
@@ -58,14 +57,26 @@ export const userLogin = async (req: Request, res: Response) => {
             res.status(400).json({message:"No or invalid credentials"})
             return
         }
-        
 
         const token = await generateSignedToken(user._id);
         res.status(200).json({message: "Successfully logged in",  token})
         return
 
     } catch (error) {
-        res.json(500).json({message: "Internal server error",  error})
+        res.status(500).json({message: "Internal server error",  error})
+        return
+    }
+}
+
+export const myProfile = async (req:CustomRequest, res:Response )=> {
+    try {
+        const user = req.user
+
+        const profile = await UserModel.findById(user.userId)
+        res.status(200).json({message: "Profile",profile})
+        return
+    } catch (error) {
+        res.status(500).json({message: `Internal server error ${error}`})
         return
     }
 }

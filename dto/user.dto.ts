@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 // src/dto/user.dto.ts
 export interface CreateUser {
     name: string;
@@ -17,3 +19,7 @@ export interface CreateUser {
     email:string,
     password:string
   }
+ 
+export interface CustomRequest extends Request {
+    user?: any; // Replace 'any' with a proper User type if you have one
+}
